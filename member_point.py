@@ -40,11 +40,14 @@ def MENU():
     print("----------------------------------------")
     for k in range(len(food)):
         print(f"{k+1}.{food[k][0]:<35}{food[k][1]:>2}")
-    print("========================================")
+    print("========================================\n")
 
 MENU()
 
+total_order = []
+
 def play(name):
+    global all_order
     point_member = 0
     all_order = []
     for i in range(3):
@@ -54,10 +57,11 @@ def play(name):
                 order = input("How your order? : ")
                 if order == "":
                     break
-                # elif order not in dict_snack:
-                #     print("ERROR")
-                #     continue
+                elif order not in dict_snack:
+                    print("ERROR")
+                    continue
                 all_order.append((dict_name_snack[order],dict_snack[order]))
+                total_order.append((dict_name_snack[order],dict_snack[order]))
                 point_member += dict_snack[order]
         elif i == 1:
             print('Order Drinking ! ')
@@ -65,10 +69,11 @@ def play(name):
                 order = input("How your order? : ")
                 if order == "":
                     break
-                # elif order not in dict_drinking:
-                #     print("ERROR")
-                #     continue
+                elif order not in dict_drinking:
+                    print("ERROR")
+                    continue
                 all_order.append((dict_name_drinking[order],dict_drinking[order]))
+                total_order.append((dict_name_drinking[order],dict_drinking[order]))
                 point_member += dict_drinking[order]
         elif i == 2:
             print('Order Food ! ')
@@ -76,14 +81,17 @@ def play(name):
                 order = input("How your order? : ")
                 if order == "":
                     break
-                # elif order not in dict_food:
-                #     print("ERROR")
-                #     continue
+                elif order not in dict_food:
+                    print("ERROR")
+                    continue
                 all_order.append((dict_name_food[order],dict_food[order]))
+                total_order.append((dict_name_food[order],dict_food[order]))
                 point_member += dict_food[order]
     
     total_point = point_member//10
     dict_member[name] = total_point
+    
+        
     
     def bill():
         print(f"\n{'Total Bill'.center(40)}")
@@ -102,12 +110,31 @@ def play(name):
             point += (all_order[i][1]*num)
         print(f"\nTotal{point:>35}")
         print("----------------------------------------")
-        print(f"Member Point{dict_member[name]:>28}")
+        print(f"Member Point{dict_member[name]:>28}\n")
     bill()
+    
+def total_bill(total_order):
+    print(f"\n{'Summary of today'.center(40)}")
+    print("========================================")
+    new_total_order = []
+    for i in total_order:
+        if i not in new_total_order:
+            new_total_order.append(i)
+        else:
+            continue
+    total_point = 0  
+    for j in range(len(new_total_order)):
+        c = total_order.count(new_total_order[j])
+        print(f"{c:>2}  {new_total_order[j][0]:<33}{(new_total_order[j][1]*c):>3}")
+        total_point += new_total_order[j][1]*c
+    print(f"\nTotal{total_point:>35}")
+    print("----------------------------------------")
+    
 
 while True:
     name = input("Welcome to my mart Khun ? ")
     if name != 'close':
         play(name)
     else:
+        total_bill(total_order)
         break
